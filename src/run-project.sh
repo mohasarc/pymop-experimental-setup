@@ -72,15 +72,14 @@ if [ "$algo" != "ORIGINAL" ]; then
     git checkout add_statistics_new
 
     pip3 install .
-    sudo apt-get install python3-tk -y
 
     # delete some problematic specs
     rm ./specs-new/TfFunction_NoSideEffect.py
-    rm ./specs-new/Sets_Comparable.py
-    rm ./specs-new/Console_CloseReader.py
-    rm ./specs-new/UnsafeMapIterator.py
-    rm ./specs-new/UnsafeListIterator.py
-    rm ./specs-new/Pydocs_UselessFileOpen.py
+    # rm ./specs-new/Sets_Comparable.py
+    # rm ./specs-new/Console_CloseReader.py
+    # rm ./specs-new/UnsafeMapIterator.py
+    # rm ./specs-new/UnsafeListIterator.py
+    # rm ./specs-new/Pydocs_UselessFileOpen.py
 
     cd ../$(basename "$link" .git)
 fi
