@@ -7,7 +7,7 @@ import time
 
 ALGOS = ['original', 'A', 'B', 'C', 'C+', 'D']
 PROJECTS_CSV_NAME = "project-links.csv"
-TIMEOUT_SECONDS = 14400
+TIMEOUT_SECONDS = "14400"
 
 with open('./.env', 'r') as file:
     GITHUB_TOKEN = file.read().strip().split('=')[1]
@@ -20,7 +20,7 @@ total_time = 0
 lock = Lock()
 
 def print_stats(total_containers, link, sha, algo):
-    print(f"Running {started_containers}/{total_containers}: {link} with sha {sha} and algo {algo} with token {GITHUB_TOKEN} and timeout {TIMEOUT_SECONDS}")
+    print(f"Running {started_containers}/{total_containers}: {link} with sha {sha} and algo {algo} with timeout {TIMEOUT_SECONDS}")
     print('\n')
     print(f"Total time: {total_time} seconds")
     print(f"Average time per container: {total_time / started_containers} seconds")
@@ -36,11 +36,14 @@ def run_container(link, sha, algo, total_containers):
 
     started_at = time.time()
 
-    command = f"docker run -v {current_dir}:/experiment/__results__ pymop-experiment {link} {sha} {algo} {TIMEOUT_SECONDS} {GITHUB_TOKEN}"
-    print(command)
-    subprocess.run([
-        "docker", "run", "-v", f"{current_dir}:/experiment/__results__", "pymop-experiment", link, sha, algo, TIMEOUT_SECONDS, GITHUB_TOKEN
-    ])
+    project_name = link.split('/')[-1].replace('.git', '')
+    unique_results_dir = f"{current_dir}/results/{project_name}_{sha}_{algo}/"
+    try:
+        subprocess.run([
+            "docker", "run", "--rm", "-v", f"{unique_results_dir}:/experiment/__results__", "pymop-experiment", link, sha, algo, TIMEOUT_SECONDS, GITHUB_TOKEN
+        ])
+    except Exception as e:
+        print(f"Error running container: {e}")
 
     ended_at = time.time()
     with lock:
@@ -66,7 +69,12 @@ projects_and_algos = [
     } for project in data_entries for algo in ALGOS
 ]
 
-m = 3  # Max number of concurrent containers
+import sys
+
+if len(sys.argv) > 1:
+    m = int(sys.argv[1])  # Max number of concurrent containers from arguments
+else:
+    m = 3  # Default value if not provided
 
 # Run Docker containers concurrently with link and sha as input
 with ThreadPoolExecutor(max_workers=m) as executor:

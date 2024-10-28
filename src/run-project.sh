@@ -118,7 +118,7 @@ if [ "$algo" = "original" ]; then
         --memray-bin-path=$results_dir/MEM_$algo \
         --continue-on-collection-errors \
         --json-report \
-        --json-report-indent=2 &> $results_dir/output_$algo.txt
+        --json-report-indent=2 > $results_dir/$algo-pytest-output.txt 2>&1  # Redirecting pytest output to a file
 else
     timeout $timeout pytest \
         --color=no \
@@ -135,8 +135,7 @@ else
         --json-report \
         --json-report-indent=2 \
         --statistics \
-        --statistics_file="$algo".json \
-        &> $results_dir/output_$algo.txt
+        --statistics_file="$algo".json > $results_dir/$algo-pytest-output.txt 2>&1
 fi
 
 END_TIME=$(python3 -c 'import time; print(time.time())')
@@ -151,7 +150,7 @@ if [ $? -eq 124 ]; then
 fi
 
 set +x
-
+    
 ls -l
 
 mv .report.json $results_dir/$algo.report.json

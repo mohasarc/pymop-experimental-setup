@@ -11,3 +11,6 @@ venv/
 # Docker
 *.log
 *.tmp
+
+# Results
+results/
