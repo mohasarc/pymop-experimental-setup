@@ -56,8 +56,8 @@ find . -maxdepth 3 -type d -name "env" -prune -o -type f -name "*.txt" -print | 
 done
 
 # Install pytest and a few common plugins
-pip install pytest
-pip install pytest-json-report memray pytest-memray pytest-cov pytest-env pytest-rerunfailures pytest-socket pytest-django
+pip3 install pytest
+pip3 install pytest-json-report memray pytest-memray pytest-cov pytest-env pytest-rerunfailures pytest-socket pytest-django
 
 if [ "$algo" != "original" ]; then
     # clone and install pymop if algo is original
@@ -70,7 +70,7 @@ if [ "$algo" != "original" ]; then
     cd mop-with-dynapt
     git checkout add_statistics_new
 
-    pip install .
+    pip3 install .
     sudo apt-get install python3-tk -y
 
     # delete some problematic specs
