@@ -29,7 +29,7 @@ cd $(basename "$link" .git)
 if [ -n "$sha" ]; then
   echo "SHA exists: $sha"
   # Assuming you have already cloned the repo and are in the repo directory
-  git fetch --depth 1 "$sha"
+  git fetch origin "$sha" --depth 1
   git checkout "$sha"
 else
   echo "SHA is empty, no checkout performed."
@@ -165,8 +165,8 @@ ls -l $results_dir
 #                      SAVE RESULTS                    #
 ########################################################
 
-# Zip file name: repo-name-algo-sha.zip
-zip_file="../__results__/$(basename "$link" .git)-$algo-$sha.zip"
+# Zip file name: repo-name-algo-sha.tar.gz
+zip_file="../__results__/$(basename "$link" .git)-$algo-$sha.tar.gz"
 
 # compress results dir
 tar -czvf $zip_file $results_dir

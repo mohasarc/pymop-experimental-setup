@@ -25,7 +25,7 @@ This is a Docker-based configuration to run pymop. Follow the steps below to get
 6. Run the experiment using the following command (replace `<max_concurrent_containers>` with the desired number of concurrent containers):
 
    ```sh
-   python3 ./run-experiment.py <max_concurrent_containers>
+   python3 ./src/run-experiment.py <max_concurrent_containers>
    ```
 
 That's it! The script will handle the rest. The results will be saved in the `results` directory.
