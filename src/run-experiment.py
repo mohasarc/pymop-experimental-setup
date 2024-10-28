@@ -5,7 +5,7 @@ import os
 from threading import Lock
 import time
 
-ALGOS = ['original', 'A', 'B', 'C', 'C+', 'D']
+ALGOS = ['original', 'B', 'C', 'C+', 'D']
 PROJECTS_CSV_NAME = "project-links.csv"
 TIMEOUT_SECONDS = "14400"
 
