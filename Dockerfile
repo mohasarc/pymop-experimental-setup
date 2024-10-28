@@ -8,6 +8,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
+    python3.10-venv \
     curl \
     git \
     openjdk-11-jdk \
@@ -22,12 +23,9 @@ ENV PATH="${JAVA_HOME}/bin:${PATH}"
 # Set the working directory inside the container
 WORKDIR /experiment
 
-# ls -la
-RUN ls -la
-
 
 # Copy your application code into the container
-COPY . /experiment
+COPY ./src /experiment/src
 
 # Example: Install Python dependencies if needed (adjust as necessary)
 # RUN pip3 install -r requirements.txt

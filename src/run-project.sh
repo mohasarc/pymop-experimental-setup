@@ -42,8 +42,8 @@ fi
 echo "Installing dependencies..."
 
 # Create and activate a virtual environment
-python -m venv venv
-source venv/bin/activate
+python3 -m venv venv
+. venv/bin/activate
 
 # Install dependencies
 pip3 install .[dev,test,tests,testing]
