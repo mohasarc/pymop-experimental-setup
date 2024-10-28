@@ -51,6 +51,7 @@ pip3 install .[dev,test,tests,testing]
 # Install additional requirements if available (within root + 2 nest levels excluding env/ folder)
 find . -maxdepth 3 -type d -name "env" -prune -o -type f -name "*.txt" -print | while read -r file; do
     if [ -f "$file" ]; then
+        echo "Installing requirements from $file"
         pip3 install -r "$file"
     fi
 done
@@ -59,7 +60,7 @@ done
 pip3 install pytest
 pip3 install pytest-json-report memray pytest-memray pytest-cov pytest-env pytest-rerunfailures pytest-socket pytest-django
 
-if [ "$algo" != "original" ]; then
+if [ "$algo" != "ORIGINAL" ]; then
     # clone and install pymop if algo is original
     echo clonning and installing pymop
 
@@ -89,7 +90,10 @@ fi
 ########################################################
 echo "Running experiment..."
 
-results_dir="../results"
+owner=$(basename $(dirname "$link"))
+repo=$(basename "$link" .git)
+full_project_name="$owner-$repo-$sha-$algo"
+results_dir="../$full_project_name"
 
 if [ ! -d "$results_dir" ]; then
     mkdir "$results_dir"
@@ -114,7 +118,7 @@ export PYTHONIOENCODING=utf8
 
 START_TIME=$(python3 -c 'import time; print(time.time())')
 echo "START_TIME: $START_TIME"
-if [ "$algo" = "original" ]; then
+if [ "$algo" = "ORIGINAL" ]; then
     # Run without pythonmop
     timeout $timeout pytest \
         --color=no \
@@ -173,8 +177,8 @@ ls -l $results_dir
 #                      SAVE RESULTS                    #
 ########################################################
 
-# Zip file name: repo-name-algo-sha.tar.gz
-zip_file="../__results__/$(basename "$link" .git)-$algo-$sha.tar.gz"
+# Zip file name: owner-repo-algo-sha.zip
+zip_file="../__results__/$full_project_name.tar.gz"
 
 # compress results dir
 tar -czvf $zip_file $results_dir

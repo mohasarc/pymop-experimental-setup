@@ -5,7 +5,7 @@ import os
 from threading import Lock
 import time
 
-ALGOS = ['original', 'B', 'C', 'C+', 'D']
+ALGOS = ['ORIGINAL', 'B', 'C', 'C+', 'D']
 PROJECTS_CSV_NAME = "project-links.csv"
 TIMEOUT_SECONDS = "14400"
 
@@ -35,12 +35,9 @@ def run_container(link, sha, algo, total_containers):
         print_stats(total_containers, link, sha, algo)
 
     started_at = time.time()
-
-    project_name = link.split('/')[-1].replace('.git', '')
-    unique_results_dir = f"{current_dir}/results/{project_name}_{sha}_{algo}/"
     try:
         subprocess.run([
-            "docker", "run", "--rm", "-v", f"{unique_results_dir}:/experiment/__results__", "pymop-experiment", link, sha, algo, TIMEOUT_SECONDS, GITHUB_TOKEN
+            "docker", "run", "--rm", "-v", f"{current_dir}/results/:/experiment/__results__", "pymop-experiment", link, sha, algo, TIMEOUT_SECONDS, GITHUB_TOKEN
         ])
     except Exception as e:
         print(f"Error running container: {e}")

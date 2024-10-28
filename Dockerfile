@@ -13,6 +13,15 @@ RUN apt-get update && apt-get install -y \
     git \
     openjdk-11-jdk \
     python3-tk \
+    build-essential \
+    libssl-dev \
+    libffi-dev \
+    libxml2-dev \
+    libxslt1-dev \
+    zlib1g-dev \
+    libkrb5-dev \
+    libpq-dev \
+    rpm \
     # Any additional tools you need
     && rm -rf /var/lib/apt/lists/*
 
