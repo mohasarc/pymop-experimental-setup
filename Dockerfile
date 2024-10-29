@@ -39,6 +39,21 @@ COPY ./src /experiment/src
 # Example: Install Python dependencies if needed (adjust as necessary)
 # RUN pip3 install -r requirements.txt
 
+ARG GITHUB_TOKEN
+
+# Create a permanent venv with all pymop dependencies
+RUN python3 -m venv /opt/pymop_venv && \
+    . /opt/pymop_venv/bin/activate && \
+    pip3 install --upgrade pip && \
+    # Clone and prepare mop-with-dynapt
+    git clone https://${GITHUB_TOKEN}@github.com/SoftEngResearch/mop-with-dynapt.git /opt/mop-with-dynapt && \
+    cd /opt/mop-with-dynapt && \
+    git checkout add_statistics_new && \
+    # Install pymop and its dependencies
+    pip3 install . && \
+    # Create a requirements file for quick reinstall
+    pip3 freeze > /opt/pymop_requirements.txt
+
 # Specify the default command to run when the container starts
 # Other steps remain the same
 

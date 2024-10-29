@@ -45,6 +45,25 @@ echo "Installing dependencies..."
 python3 -m venv venv
 . venv/bin/activate
 
+if [ "$algo" != "ORIGINAL" ]; then
+    # clone and install pymop if algo is original
+    echo "Installing pymop from pre-installed dependencies..."
+    
+    # Copy pre-installed packages from the permanent venv to the current one
+    cp -r /opt/pymop_venv/lib/python3*/site-packages/* venv/lib/python3*/site-packages/
+    
+    # Create symlink to the specs directory for easy access
+    ln -s /opt/mop-with-dynapt/specs-new specs-new
+
+    # delete some problematic specs
+    rm ./specs-new/TfFunction_NoSideEffect.py
+    # rm ./specs-new/Sets_Comparable.py
+    # rm ./specs-new/Console_CloseReader.py
+    # rm ./specs-new/UnsafeMapIterator.py
+    # rm ./specs-new/UnsafeListIterator.py
+    # rm ./specs-new/Pydocs_UselessFileOpen.py
+fi
+
 # Install dependencies
 pip3 install .[dev,test,tests,testing]
 
@@ -60,29 +79,6 @@ done
 pip3 install pytest
 pip3 install pytest-json-report memray pytest-memray pytest-cov pytest-env pytest-rerunfailures pytest-socket pytest-django
 
-if [ "$algo" != "ORIGINAL" ]; then
-    # clone and install pymop if algo is original
-    echo clonning and installing pymop
-
-    cd ..
-
-
-    git clone https://${github_token}@github.com/SoftEngResearch/mop-with-dynapt.git
-    cd mop-with-dynapt
-    git checkout add_statistics_new
-
-    pip3 install .
-
-    # delete some problematic specs
-    rm ./specs-new/TfFunction_NoSideEffect.py
-    # rm ./specs-new/Sets_Comparable.py
-    # rm ./specs-new/Console_CloseReader.py
-    # rm ./specs-new/UnsafeMapIterator.py
-    # rm ./specs-new/UnsafeListIterator.py
-    # rm ./specs-new/Pydocs_UselessFileOpen.py
-
-    cd ../$(basename "$link" .git)
-fi
 
 ########################################################
 #                    RUN EXPERIMENT                    #
@@ -107,8 +103,8 @@ echo "{\"sha-commit\": \"$sha\", \"project-url\": \"$url\"}" > $results_dir/proj
 rm -f .pymon
 
 echo ============= Specs being used are =============
-if [ -d "$PWD"/../mop-with-dynapt/specs-new/ ]; then
-    ls -al "$PWD"/../mop-with-dynapt/specs-new/
+if [ -d "$PWD"/specs-new/ ]; then
+    ls -al "$PWD"/specs-new/
 fi
 echo ================================================ 
 
@@ -136,7 +132,7 @@ else
         -v \
         -p pythonmop \
         -rA \
-        --path="$PWD"/../mop-with-dynapt/specs-new/ \
+        --path="$PWD"/specs-new/ \
         --algo $algo \
         --memray \
         --trace-python-allocators \
