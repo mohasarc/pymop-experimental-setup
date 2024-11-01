@@ -20,7 +20,19 @@ fi
 ########################################################
 echo "Cloning repository..."
 
-git clone --depth 1 $link
+retry_count=0
+max_retries=10
+while [ $retry_count -lt $max_retries ]; do
+  git clone --depth 1 $link && break
+  retry_count=$((retry_count + 1))
+  echo "Clone failed. Retrying in 10 seconds... ($retry_count/$max_retries)"
+  sleep 10
+done
+
+if [ $retry_count -eq $max_retries ]; then
+  echo "Error: Failed to clone repository after $max_retries attempts."
+  exit 1
+fi
 
 cd $(basename "$link" .git)
 
