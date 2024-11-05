@@ -89,7 +89,7 @@ done
 
 # Install pytest and a few common plugins
 pip3 install pytest
-pip3 install pytest-json-report memray pytest-memray pytest-cov pytest-env pytest-rerunfailures pytest-socket pytest-django
+pip3 install pytest-json-report memray pytest-memray pytest-cov pytest-env pytest-rerunfailures pytest-socket pytest-django py-spy
 
 
 ########################################################
@@ -127,7 +127,7 @@ START_TIME=$(python3 -c 'import time; print(time.time())')
 echo "START_TIME: $START_TIME"
 if [ "$algo" = "ORIGINAL" ]; then
     # Run without pythonmop
-    timeout $timeout pytest \
+    timeout $timeout py-spy record -i -o $algo-profile-flamegraph.svg -r 100 -s --function -d $((timeout - 10)) -- pytest \
         --color=no \
         -v \
         -rA \
@@ -139,7 +139,7 @@ if [ "$algo" = "ORIGINAL" ]; then
         --json-report \
         --json-report-indent=2 > $results_dir/$algo-pytest-output.txt 2>&1  # Redirecting pytest output to a file
 else
-    timeout $timeout pytest \
+    timeout $timeout py-spy record -i -o $algo-profile-flamegraph.svg -r 100 -s --function -d $((timeout - 10)) -- pytest \
         --color=no \
         -v \
         -p pythonmop \
@@ -176,6 +176,7 @@ mv .report.json $results_dir/$algo.report.json
 mv "$algo"-full.json $results_dir/$algo-full.json
 mv "$algo"-violations.json $results_dir/$algo-violations.json
 mv "$algo"-time.json $results_dir/$algo-time.json
+mv $algo-profile-flamegraph.svg $results_dir/$algo-profile-flamegraph.svg
 
 
 ls -l $results_dir
