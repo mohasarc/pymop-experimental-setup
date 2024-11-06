@@ -29,4 +29,4 @@ jobs:
         context: .
         push: true
         tags: ghcr.io/${{ github.repository }}:latest
-        build-args: GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+        build-args: GITHUB_TOKEN=${{ secrets.GH_ACCESS_TOKEN }}
