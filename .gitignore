@@ -11,6 +11,7 @@ venv/
 # Docker
 *.log
 *.tmp
+.DS_Store
 
 # Results
 results/
