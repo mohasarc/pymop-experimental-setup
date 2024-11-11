@@ -127,7 +127,7 @@ START_TIME=$(python3 -c 'import time; print(time.time())')
 echo "START_TIME: $START_TIME"
 if [ "$algo" = "ORIGINAL" ]; then
     # Run without pythonmop
-    timeout $timeout austin -i 2000 -o $algo-profile.austin pytest \
+    timeout $timeout austin -i 10000 -o $algo-profile.austin pytest \
         --color=no \
         -v \
         -rA \
@@ -139,7 +139,7 @@ if [ "$algo" = "ORIGINAL" ]; then
         --json-report \
         --json-report-indent=2 > $results_dir/$algo-pytest-output.txt 2>&1  # Redirecting pytest output to a file
 else
-    timeout $timeout austin -i 2000 -o $algo-profile.austin pytest \
+    timeout $timeout austin -i 10000 -o $algo-profile.austin pytest \
         --color=no \
         -v \
         -p pythonmop \
