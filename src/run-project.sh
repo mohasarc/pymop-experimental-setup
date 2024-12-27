@@ -2,18 +2,44 @@
 
 echo "Running project..."
 
-link=$1
-sha=$2
-timeout=$3
-github_token=$4
+# Parse arguments
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --link)
+      link="$2"
+      shift 2
+      ;;
+    --sha)
+      sha="$2"
+      shift 2
+      ;;
+    --timeout)
+      timeout="$2"
+      shift 2
+      ;;
+    --algorithms)
+      algos="$2"
+      shift 2
+      ;;
+    *)
+      echo "Unknown option: $1"
+      exit 1
+      ;;
+  esac
+done
 
 # Check if all required inputs are provided
-if [ -z "$link" ] || [ -z "$sha" ] || [ -z "$github_token" ] || [ -z "$timeout" ]; then
+if [ -z "$link" ] || [ -z "$sha" ] || [ -z "$algos" ] || [ -z "$timeout" ]; then
   echo "Error: Missing required arguments."
-  echo "Usage: $0 <link> <sha> <github_token> <timeout>"
+  echo "Usage: $0 --link <link> --sha <sha> --timeout <timeout> --algorithms <algos>"
   exit 1
 fi
 
+echo "Inputs received:"
+echo "Link: $link"
+echo "SHA: $sha"
+echo "Timeout: $timeout"
+echo "Algorithms: $algos"
 
 ########################################################
 #                     CLONE REPO                       #
@@ -23,7 +49,7 @@ echo "Cloning repository..."
 retry_count=0
 max_retries=10
 while [ $retry_count -lt $max_retries ]; do
-  git clone --depth 1 $link && break
+  git clone --depth 1 "$link" && break
   retry_count=$((retry_count + 1))
   echo "Clone failed. Retrying in 10 seconds... ($retry_count/$max_retries)"
   sleep 10
@@ -34,18 +60,17 @@ if [ $retry_count -eq $max_retries ]; then
   exit 1
 fi
 
-cd $(basename "$link" .git)
+cd "$(basename "$link" .git)"
 
-# checkout the sha
-# If sha is not empty, attempt to checkout the sha
+# Checkout the SHA
 if [ -n "$sha" ]; then
-  echo "SHA exists: $sha"
-  # Assuming you have already cloned the repo and are in the repo directory
+  echo "Checking out SHA: $sha"
   git fetch origin "$sha" --depth 1
   git checkout "$sha"
 else
   echo "SHA is empty, no checkout performed."
 fi
+
 
 # save git info
 sha=$(git rev-parse HEAD | cut -c1-7)
@@ -95,7 +120,6 @@ repo=$(basename "$link" .git)
 
 installed=false
 # Loop through all algorithms
-algos="ORIGINAL B C C+ D"
 # algos="B"
 for algo in $algos; do
     echo "Running algorithm: $algo"
