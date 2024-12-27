@@ -22,6 +22,7 @@ RUN apt-get update && apt-get install -y \
     libkrb5-dev \
     libpq-dev \
     rpm \
+    zip \
     # Any additional tools you need
     && rm -rf /var/lib/apt/lists/*
 
@@ -32,31 +33,27 @@ ENV PATH="${JAVA_HOME}/bin:${PATH}"
 # Set the working directory inside the container
 WORKDIR /experiment
 
-
-# Copy your application code into the container
-COPY ./src /experiment/src
-
 # Example: Install Python dependencies if needed (adjust as necessary)
 # RUN pip3 install -r requirements.txt
 
 ARG GITHUB_TOKEN
 
 # Create a permanent venv with all pymop dependencies
-RUN python3 -m venv /opt/pymop_venv && \
-    . /opt/pymop_venv/bin/activate && \
-    pip3 install --upgrade pip && \
+RUN pip3 install --upgrade pip && \
     # Clone and prepare mop-with-dynapt
     git clone https://${GITHUB_TOKEN}@github.com/SoftEngResearch/mop-with-dynapt.git /opt/mop-with-dynapt && \
     cd /opt/mop-with-dynapt && \
-    git checkout add_statistics_new && \
+    git checkout optimization && \
     # Install pymop and its dependencies
-    pip3 install . && \
+    pip3 install .  && \
     # Create a requirements file for quick reinstall
     pip3 freeze > /opt/pymop_requirements.txt
 
-# Specify the default command to run when the container starts
-# Other steps remain the same
+# Copy your application code into the container
+COPY ./src /experiment/src
+
 
 # Set ENTRYPOINT to ensure passed arguments are treated as script parameters
+
 RUN chmod +x src/run-project.sh
 ENTRYPOINT ["src/run-project.sh"]
