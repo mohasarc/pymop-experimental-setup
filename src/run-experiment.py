@@ -6,7 +6,7 @@ import os
 from threading import Lock
 import time
 
-TIMEOUT_SECONDS = "14400"
+TIMEOUT_SECONDS = "3600"
 PROJECTS_CSV_NAME = "project-links.csv"
 ALGORITHMS = ["ORIGINAL", "B", "C", "C+", "D"]
 
@@ -90,12 +90,16 @@ def run_container(link, sha, algorithms):
         ]
         with lock:
             print(f"Running container with args: {args}")
-        subprocess.run(args, check=True)
+        subprocess.run(args, check=True, timeout=9000) # timeout after 2.5 hours
         status = "Done"
     except subprocess.CalledProcessError as e:
         status = "Failed"
         with lock:
             print(f"Container failed with exit code {e.returncode} for {link} {sha}")
+    except subprocess.TimeoutExpired:
+        status = "Timeout"
+        with lock:
+            print(f"Container timed out for {link} {sha}")
     except Exception as e:
         status = "Exception"
         with lock:
@@ -130,11 +134,12 @@ def main():
 
     # Get max concurrent containers from command line or use default
     max_workers = int(sys.argv[1]) if len(sys.argv) > 1 else 3
-
+    
+    time_start = time.time()
+    print(f'Time start: {time_start}')
     print(f"Starting execution with {max_workers} concurrent containers")
     print(f"Total projects to process: {len(data_entries)}")
     print('--' * 20 + '\n')
-    time_start = time.time()
 
     # Prepare tasks
     tasks = []

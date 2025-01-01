@@ -15,3 +15,7 @@ venv/
 
 # Results
 results/** 
+
+algorithm_results.csv
+results.csv
+sanity-check-results.csv
