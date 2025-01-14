@@ -103,6 +103,7 @@ done
 echo "Installing pymop from pre-installed dependencies..."
 
 cd /opt/mop-with-dynapt
+  pip install wheel
   pip install .
 cd -
 

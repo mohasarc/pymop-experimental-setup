@@ -167,13 +167,13 @@ def get_result_line(filename):
         last_line = subprocess.check_output(
             ['tail', '-1', filename]).decode('utf-8').strip()
         # if the last line is not the one we want, get the last 100 lines and search
-        if 'in' in last_line and re.search(r'\b(passed|errors|error)\b', last_line) and "WARNING" not in last_line:
+        if 'in' in last_line and '=' in last_line and re.search(r'\b(passed|errors|error)\b', last_line) and "WARNING" not in last_line:
             return last_line
         else:
             last_lines = subprocess.check_output(
                 ['tail', '-500', filename]).decode('utf-8').strip().split('\n')
             for line in reversed(last_lines):
-                if 'in' in line and re.search(r'\b(passed|errors|error)\b', line) and "WARNING" not in line:
+                if 'in' in line and '=' in line  and re.search(r'\b(passed|errors|error)\b', line) and "WARNING" not in line:
                     last_line = line
                     return last_line
             
@@ -313,7 +313,7 @@ def compare(results, projectname):
                     result['comparison_problems'] = f'{message}'
                     add_problem(projectname, result['algorithm'], message)
             else:
-                message = f'Non-numeric or invalid data for comparison. Original: {original_value_clean}, Result: {result_value_clean}'
+                message = f'Non-numeric or invalid data for comparison. Original: {original_value_clean}, Result: {result_value_clean}, Key: {key}'
                 result['comparison_problems'] = f'{message}'
                 add_problem(projectname, result['algorithm'], message)
     print('done comparing')

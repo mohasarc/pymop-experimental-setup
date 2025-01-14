@@ -100,7 +100,7 @@ def reshape_and_save_algorithm_data(df, algorithm_column, output_path='results.c
 
     return result
 
-df = pd.read_csv("sanity-check-results.csv")
+df = pd.read_csv("sanity-check-results_main_new.csv")
 reshaped_df = reshape_and_save_algorithm_data(
     df=df,
     algorithm_column='algorithm',
