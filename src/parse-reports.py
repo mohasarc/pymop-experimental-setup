@@ -127,8 +127,12 @@ def get_num_violations_from_json(projectname, algorithm):
         add_problem(projectname, algorithm, "json violations not found")
         return None
     # read json file
-    with open(filename, 'r') as f:
-        json_data = json.load(f)
+    try:
+        with open(filename, 'r') as f:
+            json_data = json.load(f)
+    except Exception as e:
+        add_problem(projectname, algorithm, f"Error reading json file. Original error: {e}")
+        return None
 
     return_spec_string = ""
     total_violations = 0

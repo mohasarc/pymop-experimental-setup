@@ -113,6 +113,46 @@ cd -
 
 # delete some problematic specs
 rm -f /opt/mop-with-dynapt/specs-new/TfFunction_NoSideEffect.py
+#rm -f /opt/mop-with-dynapt/specs-new/CreateWidgetOnSameFrameCanvas.py
+#rm -f /opt/mop-with-dynapt/specs-new/Turtle_LastStatementDone.py
+#rm -f /opt/mop-with-dynapt/specs-new/Pydocs_MustShutdownProcessPoolExecutor.py  
+#rm -f /opt/mop-with-dynapt/specs-new/Pydocs_MustShutdownExecutor.py
+#rm -f /opt/mop-with-dynapt/specs-new/Pydocs_UselessProcessPoolExecutor.py 
+#rm -f /opt/mop-with-dynapt/specs-new/Pydocs_UselessThreadPoolExecutor.py
+#rm -f /opt/mop-with-dynapt/specs-new/Pydocs_MustShutdownThreadPoolExecutor.py
+#rm -f /opt/mop-with-dynapt/specs-new/faulthandler_disableBeforeClose.py  
+#rm -f /opt/mop-with-dynapt/specs-new/faulthandler_tracetrackDumpBeforeClose.py
+#rm -f /opt/mop-with-dynapt/specs-new/faulthandler_unregisterBeforeClose.py
+#rm -f /opt/mop-with-dynapt/specs-new/UnsafeArrayIterator.py
+
+# new
+#rm -f /opt/mop-with-dynapt/specs-new/PyDocs_MustLockOnce.py
+rm -f /opt/mop-with-dynapt/specs-new/PyDocs_SharedMemoryUseAfterUnlink.py
+#rm -f /opt/mop-with-dynapt/specs-new/Pydocs_HTTPConnectionSendSequence.py
+
+
+#sanity check owolabi
+# Diretórios de origem e destino
+SRC_DIR="/opt/mop-with-dynapt/specs-new"
+DEST_DIR="/tmp/specs_old"
+
+# Criar o diretório de destino se não existir
+mkdir -p "$DEST_DIR"
+
+# Lista de arquivos que devem ser movidos
+#FILES_TO_MOVE="
+#PyDocs_MustSortBeforeGroupBy.py
+#PyDocs_UnsafeIterUseAfterTee.py
+#PyDocs_UselessIterTee.py
+#UnsafeArrayIterator.py"
+
+# Mover os arquivos para o diretório de destino
+#for file in $FILES_TO_MOVE; do
+#    if [ -e "$SRC_DIR/$file" ]; then
+#        mv "$SRC_DIR/$file" "$DEST_DIR"/
+#    fi
+#done
+
 
 pip3 install pytest-json-report memray pytest-memray pytest-cov pytest-env pytest-rerunfailures pytest-socket pytest-django austin-dist
 

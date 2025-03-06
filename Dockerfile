@@ -43,8 +43,9 @@ RUN pip3 install --upgrade pip && \
     # Clone and prepare mop-with-dynapt
     git clone https://${GITHUB_TOKEN}@github.com/SoftEngResearch/mop-with-dynapt.git /opt/mop-with-dynapt && \
     cd /opt/mop-with-dynapt && \
-    git checkout main  && \
-    # Install pymop and its dependencies
+    git checkout main  # && \ 
+   # git checkout 4f32c37213f121b700afbe04b6ce39c36496db4e && \
+# Install pymop and its dependencies
     pip3 install .  && \
     # Create a requirements file for quick reinstall
     pip3 freeze > /opt/pymop_requirements.txt

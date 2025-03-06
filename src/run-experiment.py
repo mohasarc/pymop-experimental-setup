@@ -181,5 +181,5 @@ def main():
 
 
 if __name__ == "__main__":
-    run_all_algos_in_one_container = False  # set this to False for separate containers per algorithm
+    run_all_algos_in_one_container = True  # set this to False for separate containers per algorithm
     main()
