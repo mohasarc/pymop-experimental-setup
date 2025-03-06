@@ -14,4 +14,8 @@ venv/
 .DS_Store
 
 # Results
-results/
+results/** 
+
+algorithm_results.csv
+results.csv
+sanity-check-results.csv
